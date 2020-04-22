@@ -6,31 +6,95 @@
 </head>
 
 <body>
-<!--
-  hard-code the svg and various g layers so that even if the streets are loaded
-  and drawn last, they will still show up behind the symbols
--->
-<select id="dropdown"></select>
-
 <figure>
-  <svg width="960" height="600" id="vis">
-    <g id="basemap"></g>
-
-    <!-- turn off pointer events for certain groups -->
-    <g id="streets" pointer-events="none"></g>
-    <g id="outline" pointer-events="none"></g>
-
-    <g id="arrests"></g>
-    <g id="tooltip" pointer-events="none"></g>
-    <g id="details" pointer-events="none"></g>
-  </svg>
-
-  <figcaption>
-    Source: <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6/data">Data SF 311 Cases</a> (<a href="https://data.sfgov.org/Geographic-Locations-and-Boundaries/Analysis-Neighborhoods/p5b7-5n3h">Neighborhoods</a>, <a href="https://data.sfgov.org/Geographic-Locations-and-Boundaries/Streets-Active-and-Retired/3psu-pn9h">Streets</a>)
-  </figcaption>
+  <svg width="960" height="600" id="vis"> </svg>
 </figure>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
+
 <script>
+//City » Battalion » Station  » Number of Calls
+let link = "Fire_Department_Calls_for_Service.csv"
+const original = d3.csv(link, function(row) {
+  return row;
+});
+console.log(original)
+nodes = new Set(original.map(row => row["Call Number"]))
+// parent id is City
+// unque id
+// Call Number,Unit ID,Incident Number,Call Type,Call Date,Watch Date,Received DtTm,Entry DtTm,Dispatch DtTm,Response DtTm,On Scene DtTm,Transport DtTm,Hospital DtTm,Call Final Disposition,Available DtTm,Address,City,Zipcode of Incident,Battalion,Station Area,Box,Original Priority,Priority,Final Priority,ALS Unit,Call Type Group,Number of Alarms,Unit Type,Unit sequence in call dispatch,Fire Prevention District,Supervisor District,Neighborhooods - Analysis Boundaries,Location,RowID
+console.log(nodes)
+
+// processed = original.map(function(row) {
+//   // get name of parent node
+//   // let parent = row.name.substring(0, row.name.lastIndexOf("."));
+//   let parent = row['City']
+//
+//   return {
+//     call: row["Call Number"],
+//     // if there isn't a parent node set the paren to java directly
+//     parent: nodes.has(parent) || row.call === "San Francisco" ? parent : "San Francisco",
+//     size: row.size
+//   };
+// })
+
+// console.log(processed)
+
+// root = d3.stratify()
+//     .id(function(row) { return row.name; })
+//     .parentId(function(row) {
+//       return row.parent;
+//     })
+//     (processed);
+//
+//     java11 = {
+//       root.count()
+//       root.each(function(node) {
+//         // copy this calculation since value is sometimes overwritten
+//         node.data.leaves = node.value;
+//       })
+//       root.sum(row => row.size)
+//       root.each(function(node) {
+//         // copy this calculation since value is sometimes overwritten
+//         node.data.total = node.value;
+//       })
+//       return root;
+//     }
+
+// dendrogram = {
+//   // get selected subtree
+//   let data = findModule();
+//
+//   // sort larger valued nodes first
+//   data.sort(function(a, b) {
+//     return b.height - a.height || b.count - a.count;
+//   });
+//
+//   // size of layout will be width and height minus some padding
+//   let layout = d3.cluster().size([width - 2 * pad, height - 2 * pad]);
+//
+//   // call layout to calculate (x, y) locations of nodes and sizes
+//   layout(data);
+//
+//   // setup svg width and height
+//   let svg = d3.select(DOM.svg(width, height))
+//       .style("width", width)
+//       .style("height", height);
+//
+//   // shift (0, 0) a little bit to leave some padding
+//   let plot = svg.append("g")
+//     .attr("id", "plot")
+//     .attr("transform", translate(pad, pad));
+//
+//   // data.links() are all of the edges as an array
+//   drawLinks(plot.append("g"), data.links(), straightLine);
+//
+//   // data.descendants() are all of the nodes as an array
+//   drawNodes(plot.append("g"), data.descendants(), true);
+//
+//   return svg.node();
+// }
+
+
 </script>
 </body>

@@ -1,70 +1,29 @@
-body {
-  background-color: white;
-  text-align: center;
-
-  font-family: sans-serif;
-  font-size: 9pt;
+html`
+<style>
+svg {
+  // border: 1px dotted whitesmoke;
 }
-
-#tooltip {
-  font-weight: 600;
-  text-shadow: 0px 0px 2px white;
-
-  fill: black;
-  stroke: none;
-}
-
-#dropdown {
-    margin-bottom: 20px;
-    margin-right: 35px;
-}
-
-path.land {
-  fill: #dddddd;
-  stroke: none;
-}
-
-path.neighborhood {
-  fill: none;
-  stroke: white;
-  stroke-width: 3.5px;
-  pointer-events: none;
-}
-
-path.street {
-  fill: none;
-  stroke: white;
+.node {
+  stroke: silver;
   stroke-width: 1px;
-  pointer-events: none;
 }
 
-.active {
+.link {
+  fill: none;
+  stroke: silver;
+  stroke-width: 1px;
+}
+
+.selected {
   stroke: red !important;
-  stroke-width: 1.5px !important;
 }
 
-path.muni {
-  fill: none;
-  stroke: white;
-  stroke-width: 1px;
-  pointer-events: none;
+text#tooltip {
+  font-family: sans-serif;
+  font-size: 12px;
+  text-shadow: 1px 1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, -1px -1px 0 #fff;
+  font-weight: 900;
 }
 
-circle.symbol {
-  fill-opacity: 0.6;
-
-  stroke: white;
-  stroke-width: 1px;
-}
-
-a:link, a:visited {
-  color: #444444;
-}
-
-a:hover, a:active {
-  color: red;
-}
-
-th {
-  text-align: right;
-}
+</style>
+`

@@ -7,7 +7,7 @@
 
 <body>
 <figure>
-  <svg width="960" height="600" id="vis1"> </svg>
+  <svg width="960" height="600" id="vis2"> </svg>
 </figure>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -26,8 +26,17 @@ let pad = 1;
 
 let color;
 
+// let viewof r = slider({
+//   min: 1,
+//   max: 100,
+//   step: 1,
+//   value: 5,
+//   title: 'r',
+//   description: 'radius of circles'
+// })
 
-diameter = Math.min(width, height);
+
+let diameter = Math.min(width, height);
 
 // straightLine = {
 //   let line = d3.line()
@@ -65,8 +74,9 @@ function dataprocess(dataset)
   .key(function(d) {return d["City"]; })
   .key(function(d) {return d["Battalion"]; })
   .key(function(d) {return d["Station Area"]; })
+  .key(function(d) {return d["Number of Alarms"]; })
   // .key(function(d) {return d["Call Date"]; })
-  .key(function(d) {return d["Call Type"]; })
+  // .key(function(d) {return d["Call Type"]; })
   .rollup(function(leaves) { return leaves.length; })
   .entries(dataset);
 
@@ -76,38 +86,72 @@ function dataprocess(dataset)
 
   color = d3.scaleSequential([root.height, 0], d3.interpolateViridis)
 
-  root.count()
-
-  root.each(function(node) {
-    // copy this calculation since value is sometimes overwritten
-    node.data.leaves = node.value;
-  })
-
-  root.sum(row => row.size)
-
-  root.each(function(node) {
-    // copy this calculation since value is sometimes overwritten
-    node.data.total = node.value;
-  })
-
+  // root.count()
+  //
+  // root.each(function(node) {
+  //   // copy this calculation since value is sometimes overwritten
+  //   node.data.leaves = node.value;
+  // })
   root.sort(function(a, b) {
     return b.height - a.height || b.count - a.count;
   });
 
-  let layout = d3.tree().size([width - 2 * pad, height - 2 * pad]);
+  root.sum(row => row.value)
+
+  // root.each(function(node) {
+  //   // copy this calculation since value is sometimes overwritten
+  //   node.data.total = node.value;
+  // })
+  //
+  //
+
+  let layout = d3.treemap().padding(5).size([width - 2 * pad, height - 2 * pad]);
+
 
   layout(root);
 
-  let svg = d3.select("body").select("svg#vis1")
-      .style("width", width)
-      .style("height", height); 
+      // let layout = d3.pack()
+      //   .padding(5)
+      //   .size([diameter - 2 * pad, diameter - 2 * pad]);
+      //
+      //
+      // layout(root);
+      //
+      //
+      let svg = d3.select("body").select("svg#vis2")
+            .style("width", width)
+            .style("height", height);
+      //
+      // let plot = svg.append("g")
+      //   .attr("id", "plot")
+      //   .attr("transform", translate(pad, pad));
+      //
+      // drawNodes(plot.append("g"), root.descendants(), false);
 
   let plot = svg.append("g")
     .attr("id", "plot")
     .attr("transform", translate(pad, pad));
 
-  drawLinks(plot.append("g"), root.links(), generator);
-  drawNodes(plot.append("g"), root.descendants(), true);
+    let rects = plot.selectAll("rect")
+      .data(root.descendants())
+      .enter()
+      .append("rect")
+      .attr("x", function(d) { return d.x0; })
+      .attr("y", function(d) { return d.y0; })
+      .attr("width", function(d) { return d.x1 - d.x0; })
+      .attr("height", function(d) { return d.y1 - d.y0; })
+      .attr("id", function(d) { return d.data.key; })
+      .attr("class", "node")
+      .style("fill", function(d) {return color(d.depth)});
+
+    setupEvents(plot, rects, false);
+
+   layout = d3.pack()
+  .padding(5)
+  .size([diameter - 2 * pad, diameter - 2 * pad]);
+
+  drawNodes(plot.append("g"), root.descendants(), false);
+
 }
 
 
@@ -159,11 +203,10 @@ function setupEvents(g, selection, raise) {
     // https://github.com/d3/d3-hierarchy#node_path
     // returns path from d3.select(this) node to selection.data()[0] root node
     let path = d3.select(this).datum().path(selection.data()[0]);
-    console.log(path)
 
     // select all of the nodes on the shortest path
-    let update = selection.data(path, node =>  node.x && node.y && node.data.key); 
-    console.log(update);
+    let update = selection.data(path, node => node.data.key);
+
     // highlight the selected nodes
     update.classed('selected', true);
 
@@ -174,20 +217,21 @@ function setupEvents(g, selection, raise) {
 
   selection.on('mouseout.highlight', function(d) {
     let path = d3.select(this).datum().path(selection.data()[0]);
-    let update = selection.data(path, node => node.x && node.y && node.data.key); 
+    let update = selection.data(path, node => node.data.key);
     update.classed('selected', false);
   });
 
   // show tooltip text on mouseover (hover)
-  // selection.on('mouseover.tooltip', function(d) {
-  //   showTooltip(g, d3.select(this));
-  // });
+  selection.on('mouseover.tooltip', function(d) {
+    showTooltip(g, d3.select(this));
+  });
 
   // remove tooltip text on mouseout
-//   selection.on('mouseout.tooltip', function(d) {
-//     g.select("#tooltip").remove();
-//   });
+  selection.on('mouseout.tooltip', function(d) {
+    g.select("#tooltip").remove();
+  });
 }
+
 
 function showTooltip(g, node) {
   let gbox = g.node().getBBox();     // get bounding box of group BEFORE adding text
@@ -208,7 +252,7 @@ function showTooltip(g, node) {
   let name = datum.data.key;
 
   // use node name and total size as tooltip text
-  let text = `${name} (${numberFormat(datum.data.total)}, ${numberFormat(datum.data.leaves)}n)`;
+  let text = `${name} (${numberFormat(datum.value)})`;
 
   // create tooltip
   let tooltip = g.append('text')
@@ -242,6 +286,7 @@ function showTooltip(g, node) {
     tooltip.attr('dy', dy + tbox.height);
   }
 }
+
 
 function toCartesian(r, theta) {
   return {

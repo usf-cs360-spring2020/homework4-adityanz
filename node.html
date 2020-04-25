@@ -83,6 +83,16 @@ function dataprocess(dataset)
     .attr("id", "plot")
     .attr("transform", translate(pad, pad));
 
+    svg.select("#legend")
+svg.append("circle").attr("cx",800).attr("cy",30).attr("r", 6).style("fill", "#FCE51D")
+svg.append("circle").attr("cx",800).attr("cy",50).attr("r", 6).style("fill", "#1F8079")
+svg.append("circle").attr("cx",800).attr("cy",70).attr("r", 6).style("fill", "#330043")
+svg.append("text").attr("x", 780).attr("y", 10).text("Node Hierarchy").style("font-size", "12px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 810).attr("y", 30).text("City").style("font-size", "10px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 810).attr("y", 50).text("Supervisor District").style("font-size", "10px").attr("alignment-baseline","middle")
+svg.append("text").attr("x", 810).attr("y", 70).text("Call Type Group ").style("font-size", "10px").attr("alignment-baseline","middle")
+
+
   drawLinks(plot.append("g"), root.links(), generator);
   drawNodes(plot.append("g"), root.descendants(), true);
 }

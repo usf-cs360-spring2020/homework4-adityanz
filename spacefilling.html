@@ -39,36 +39,9 @@ let color;
 let diameter = Math.min(width, height);
 
 let zoom = d3.zoom()
-
-
-// straightLine = {
-//   let line = d3.line()
-//     .curve(d3.curveLinear)
-//     .x(d => d.x)
-//     .y(d => d.y);
-//
-//   let generator = function(node) {
-//     return line([node.source, node.target]);
-//   }
-//
-//   return generator;
-// }
-//
-// curvedLine = {
   let generator = d3.linkVertical()
     .x(d => d.x)
     .y(d => d.y);
-
-  // return generator;
-// }
-//
-// radialLine = {
-//   let generator = d3.linkRadial()
-//     .angle(d => d.theta + Math.PI / 2) // rotate, 0 angle is mapped differently here
-//     .radius(d => d.radial);
-//
-//   return generator;
-// }
 
 d3.csv(file).then(dataprocess)
 function dataprocess(dataset)
@@ -77,8 +50,8 @@ function dataprocess(dataset)
   .key(function(d) {return d["City"]; })
   .key(function(d) {return d["Battalion"]; })
   .key(function(d) {return d["Station Area"]; })
-  // .key(function(d) {return d["Box"]; })
-  .key(function(d) {return d["Number of Alarms"]; })
+  .key(function(d) {return d["Box"]; })
+  // .key(function(d) {return d["Number of Alarms"]; })
   // .key(function(d) {return d["Call Date"]; })
   // .key(function(d) {return d["Call Type"]; })
   .rollup(function(leaves) { return leaves.length; })
@@ -269,7 +242,7 @@ function showTooltip(g, node) {
   let name = datum.data.key;
 
   // use node name and total size as tooltip text
-  let text = `${name} (${numberFormat(datum.value)})`;
+  let text = `${name} , ${numberFormat(datum.value)} Cases`;
 
   // create tooltip
   let tooltip = g.append('text')

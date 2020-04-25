@@ -52,22 +52,45 @@
               <p align="center"><iframe src="https://usf-cs360-spring2020.github.io/homework4-adityanz/spacefilling.html" width="1000" height="700">Map</iframe></p>
             </figure>
 
-          <h3>Wrangling</h3>
+            <h3>Data Understanding Information</h3>
+
+
+          <p2>  For the node link diagram, I ended up looking at a hierachy of the following: </p2>
+          <br>
+
+            <p2>   Node Link: City - > Supervisor District -> Call Type Group | Values: Number of Alarms </p2>
+            <br>
+
+          <p2>    Space Filling: City - > Batallion -> Station Area -> Box | Values: Number of Alarms </p2>
+          <br>
+
+            <p2> These are just some ways to better understand the Supervisor District and the Batallion in terms of the neighbourhoods they correspond to in SF. </p2>
+<br>
+          <p2>   List of Supervisor Districts according to neighbourhoods: <a> https://en.wikipedia.org/wiki/San_Francisco_Board_of_Supervisors#Districts </a></p2>
+          <br>
+
+          <p2>   List of Fire Stations Districts according to Batallion: <a> https://sf-fire.org/fire-station-locations </a></p2>
+
+          <br>
+          <h3>Wrangling and Filtering</h3>
 
             <p2>
-              To do the encoding for the SF Fire data for February 2020, since with the current COVID19 data, march data would be realtively incomplete as most people are in their homes (kitchen fires?), but I decided to keep it consistent with my other visualizations so it remained as Feburary 2020.
-              For the node link diagram, I ended up looking at a hierachy.
+              In order to reduce the dataset, we went ahead and reduced the interval of the time period of the data to Feburary 2020, keeping it consistant with other homework assignments and removed the null values.
+
+              To do the encoding for the SF Fire data for February 2020, since with the current COVID19 data, march data would be realtively incomplete as most people are in their homes (kitchen fires?), but I decided to keep it consistent with my other visualizations so it remained as Feburary 2020 rather than including March or April 2020.
+
+              I always keep the city as the common parent node, I know the data has more than SF as the cities and thus those get eliminated. I also kept looking at the same values, the number of alarms, in order to keep a fair comparasion.
 
             </p2>
               <br></br>
               <h3>Interactivity</h3>
 
               <p2>
-                For the interactivity in this visualization, I ended up adding a simple zoom into the circle packing, to see the circle size more clearly. As for the node link graph, I ended up adding a ...
+                For the interactivity in this visualization, I ended up adding a simple zoom into the circle packing, to see the circle size more clearly since adding the Fire box in the hierachy as a child, made the inner circles very dense.  As for the node link graph, I just kept the simple tooltip, due to the datasize not being that large, I decided not to add some interactivity with the circle highlighting which node a person is on. I wanted to create a unique ID in order to highlight the whole path, however, with the duplicate values, I had to use a unique ID that I could pull from the dataset, but it did not end up working so I just kept it very simple, as also there is not a lot of data in terms of size. I made sure to make the tooltip as informative as possible and so I do like that it highlights the duplicate pieces of data, showing the link of the batallion and the number of calls, so it makes it intersting.
             </p2>
             <br></br>
             <h3>Analysis</h3>
-            For the Circle packing, I wanted to see the number of cases based on the batallion area, and it is clear, that batallion 02 and 03, which has their own station areas, ended up having the most number of calls, based on the size of the circles. 
+            For both of the diagrams, I ended up using the number of alarms. For the circle packing, I wanted to see the number of cases based on the batallion area, and it is clear, that batallion 02 and 03, which has their own station areas, ended up having the most number of calls, based on the size of the circles that are packed inside. However for the node link diagram, I could see that the number of calls were a lot more in Supervisor District 8, 10, 1 and 7. It was very interesting to see the differnces in the fire deparment, based on how the city used their calculations in terms of what areas to be considered and one could still see that certain parts of the city did have a lot more calls than another. 
             <p2>
 
           </p2>
@@ -75,7 +98,7 @@
           <h3>Conclusion</h3>
 
           <p2>
-            I enjoyed making this node link diagram and the circle packing layout. It taught me a lot about more d3 techniques such as filtering and zooming, and also controlling certain aspects of the visualization with the interactivity. It also taught me about using hierachical style data and how to process my data in a different manner.
+            I enjoyed making this node link diagram and the circle packing layout. It taught me a lot about more d3 techniques such as filtering and zooming, and also controlling certain aspects of the visualization with the interactivity. It also taught me about using hierachical style data and how to process my data in a different manner. I would like to add in the future a way to be able to use both diagrams at the same time and have interactivity in built into them.
         </p2>
             </div>
 
